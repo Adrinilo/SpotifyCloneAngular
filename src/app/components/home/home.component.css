@@ -1,0 +1,15 @@
+.btn-spotify {
+    background-color: #4caf50;
+    color: white;
+    border: 1px solid black;
+    border-radius: 9999px;
+    padding: 10px;
+}
+
+.btn-logout {
+    background-color: rgb(211, 0, 0);
+    color: white;
+    border: 1px solid black;
+    border-radius: 9999px;
+    padding: 10px;
+}
