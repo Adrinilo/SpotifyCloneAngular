@@ -7,13 +7,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { CallbackComponent } from './components/callback/callback.component';
 
 export const routes: Routes = [
+  { path: 'callback', component: CallbackComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard]  },
   { path: '**', redirectTo: '/home', pathMatch: 'full' }
 ];
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    CallbackComponent,
   ],
   imports: [BrowserModule, HttpClientModule, RouterModule.forRoot(routes)],
   providers: [],
