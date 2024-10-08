@@ -22,3 +22,7 @@
 .btn-tracks:hover {
     filter: drop-shadow(0 1px 2px #4caf50) drop-shadow(0 1px 1px #4caf50);
 }
+
+.text-spotify {
+    color: #4caf50;
+}
