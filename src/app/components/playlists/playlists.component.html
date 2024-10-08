@@ -1,0 +1,16 @@
+<div class="px-10">
+    <h2 class="text-center text-5xl text-lime-600 my-6">PLAYLIST</h2>
+    <div class="grid grid-cols-3 gap-4 justify-center">
+        <div *ngFor="let list of playlists"
+            class="bg-slate-300 p-8 rounded-lg flex flex-col justify-between items-center gap-4">
+            <img src="{{list.images[0]}}" alt="" class="size-96 self-center">
+            <h2 class="text-3xl uppercase"> {{ list.name }} </h2>
+            <div class="grid grid-cols-2 items-center justify-between w-3/5">
+                <p *ngIf="list.tracks">{{ list.tracks }} Canciones</p>
+                <button (click)="enviarDato(list.id)" class="btn-tracks w-full">Ver listado</button>
+            </div>
+            <a href="{{list.external_urls}}" target="_blank" rel="noopener noreferrer"
+                class="btn-spotify w-1/3 text-center">Ir a Spotify</a>
+        </div>
+    </div>
+</div>

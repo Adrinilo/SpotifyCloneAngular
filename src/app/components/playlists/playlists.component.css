@@ -1,0 +1,24 @@
+.btn-spotify {
+    background-color: #4caf50;
+    color: white;
+    border: 1px solid black;
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
+    border-radius: 9999px;
+    padding: 10px;
+}
+
+.btn-spotify:hover {
+    filter: drop-shadow(0 1px 2px rgb(25 20 20 / 0.3)) drop-shadow(0 1px 1px rgb(25 20 20 / 0.6));
+}
+
+.btn-tracks {
+    background-color: #191414;
+    color: white;
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
+    border-radius: 9999px;
+    padding: 8px;
+}
+
+.btn-tracks:hover {
+    filter: drop-shadow(0 1px 2px #4caf50) drop-shadow(0 1px 1px #4caf50);
+}
