@@ -8,12 +8,12 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'platinas';
-  hideNavbar = false; // Controla la visibilidad del navbar
+  onLogin = false; // Controla la visibilidad del navbar
 
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) { // NavigationEnd indica que la navegación ha llegado a su fin
-        this.hideNavbar = event.url === '/login';
+        this.onLogin = event.url === '/login';
       }
     });
   }
