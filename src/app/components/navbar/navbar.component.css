@@ -1,0 +1,18 @@
+.round-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: #164e63;
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.round-button:hover {
+  width: 2.8rem;
+  height: 2.8rem;
+}
