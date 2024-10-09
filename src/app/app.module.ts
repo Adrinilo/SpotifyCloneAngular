@@ -10,6 +10,7 @@ import { PlaylistsComponent } from './components/playlists/playlists.component';
 import { TracksComponent } from './components/tracks/tracks.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { LibraryComponent } from './components/library/library.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -29,6 +30,7 @@ export const routes: Routes = [
     PlaylistsComponent,
     TracksComponent,
     NavbarComponent,
+    LibraryComponent,
   ],
   imports: [BrowserModule, HttpClientModule, RouterModule.forRoot(routes)],
   providers: [],
