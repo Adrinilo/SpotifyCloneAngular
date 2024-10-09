@@ -2,6 +2,6 @@
   <h2>Welcome, {{ user?.display_name }}</h2>
   <p>Email: {{ user?.email }}</p>
   <p>Id: {{ user?.id }}</p>
-  <button [routerLink]="['/playlists']" class="btn-spotify w-1/6">Ver playlist</button>
+  <button [routerLink]="['/playlists']" class="btn-spotify w-1/6">Ver playlists</button>
   <button (click)="logout()" class="btn-logout w-1/6">Cerrar sesión</button>
 </div>
