@@ -22,7 +22,7 @@ export class PlaylistsComponent {
         .getUserPlaylists()
         .then((data) => {
           this.result = data;
-          this.playlists = this.getPlaylists(data.items);
+          this.playlists = this.formatPlaylists(data.items);
         })
         .catch((error) => {
           console.error('Error fetching playlists:', error);
@@ -30,7 +30,7 @@ export class PlaylistsComponent {
     }
   }
 
-  getPlaylists(items: any[]): Playlist[] {
+  formatPlaylists(items: any[]): Playlist[] {
     return items.map((item: any) => {
       let playlist: Playlist = {
         id: item.id,
