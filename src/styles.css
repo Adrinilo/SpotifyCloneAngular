@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estiliza la barra de scroll */
+
+/* Por defecto: Barra de scroll oculta */
+.contenedor-scroll::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra de scroll */
+  opacity: 0; /* Ocultar la barra inicialmente */
+  transition: opacity 0.5s ease; /* Animación para que aparezca/desaparezca suavemente */
+}
+
+/* Cuando el contenedor está en modo 'scrolling', mostrar la barra de scroll */
+.contenedor-scroll.scrolling::-webkit-scrollbar {
+  opacity: 1; /* Mostrar la barra con animación */
+}
+
+/* Estiliza el "thumb" de la barra de scroll */
+.contenedor-scroll.scrolling::-webkit-scrollbar-thumb {
+  background-color: rgba( 6 182 212 / 0.3 ); /* Color del "thumb" (parte que se mueve) */
+  border-radius: 3.75rem;
+}
+
