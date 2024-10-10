@@ -12,11 +12,11 @@
     <div *ngIf="!onLogin">
       <app-navbar></app-navbar>
     </div>
-    <div class="flex h-screen overflow-auto gap-2" [ngClass]="!onLogin ? 'px-2 pb-2' : ''">
-      <div *ngIf="!onLogin" class="w-1/6 bg-cyan-900 rounded-md">
+    <div class="flex h-screen overflow-hidden gap-2" [ngClass]="!onLogin ? 'px-2 pb-2' : ''">
+      <div *ngIf="!onLogin" class="w-1/5 h-full bg-cyan-900 rounded-md text-white">
         <app-library></app-library>
       </div>
-      <div class="" [ngClass]="!onLogin ? 'w-5/6 rounded-md bg-cyan-900' : ''">
+      <div [ngClass]="!onLogin ? 'bg-cyan-900 rounded-md' : ''">
         <router-outlet></router-outlet>
       </div>
     </div>
