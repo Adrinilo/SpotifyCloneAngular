@@ -15,7 +15,7 @@ import { LibraryComponent } from './components/library/library.component';
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'callback', component: CallbackComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard]  },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard]  },
   { path: 'playlists', component: PlaylistsComponent, canActivate: [AuthGuard]  },
   { path: 'playlists/tracks', component: TracksComponent, canActivate: [AuthGuard]  },
   { path: '**', redirectTo: '/home', pathMatch: 'full' }
