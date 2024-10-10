@@ -1,7 +1,11 @@
-<div class="p-10 flex flex-col gap-2 text-white">
-  <h2>Welcome, {{ user?.display_name }}</h2>
-  <p>Email: {{ user?.email }}</p>
-  <p>Id: {{ user?.id }}</p>
+<div class="p-5 flex flex-col gap-2 text-white">
+  <div class="grid grid-cols-4 gap-4 justify-center">
+    <div *ngFor="let list of playlists"
+      class="bg-cyan-800 hover:bg-cyan-700 rounded-md flex items-center gap-2 h-14">
+      <img src="{{list.images[0]}}" alt="cover" class="size-14 rounded-l-md">
+      <p class="uppercase text-ellipsis"> {{ list.name }} </p>
+    </div>
+  </div>
+  <p class="text-xl">Hecho para {{ user?.display_name }}</p>
   <button [routerLink]="['/playlists']" class="btn-spotify w-1/6">Ver playlists</button>
-  <button (click)="logout()" class="btn-logout w-1/6">Cerrar sesión</button>
 </div>
