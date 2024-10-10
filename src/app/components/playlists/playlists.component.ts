@@ -41,7 +41,9 @@ export class PlaylistsComponent {
         tracks: item.tracks ? item.tracks.total : 0,
         public: item.public,
         uri: item.uri,
-        external_urls: item.external_urls.spotify
+        external_urls: item.external_urls.spotify,
+        type: item.type == 'playlist' ? 'Lista' : item.type,
+        owner_name: item.owner.display_name
       };
       return playlist;
     });

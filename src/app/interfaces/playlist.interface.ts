@@ -8,4 +8,6 @@ export interface Playlist {
     uri: string;
     external_urls: string;
     tracks: number;
+    type: string;
+    owner_name: string;
 }
