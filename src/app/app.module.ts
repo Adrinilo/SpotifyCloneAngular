@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: 'callback', component: CallbackComponent },
   { path: '', component: HomeComponent, canActivate: [AuthGuard]  },
   { path: 'playlists', component: PlaylistsComponent, canActivate: [AuthGuard]  },
-  { path: 'playlists/tracks', component: TracksComponent, canActivate: [AuthGuard]  },
+  { path: 'playlist/:id', component: TracksComponent, canActivate: [AuthGuard]  },
   { path: '**', redirectTo: '/home', pathMatch: 'full' }
 ];
 
