@@ -14,7 +14,6 @@ export class TracksComponent implements OnInit {
   tracks: Track[] = [];
 
   constructor(
-    private datosService: DatosService,
     private spotifyService: SpotifyService,
     private route: ActivatedRoute
   ) {}

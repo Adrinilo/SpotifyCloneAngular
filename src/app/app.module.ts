@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard]  },
   { path: 'playlists', component: PlaylistsComponent, canActivate: [AuthGuard]  },
   { path: 'playlist/:id', component: TracksComponent, canActivate: [AuthGuard]  },
-  { path: '**', redirectTo: '/home', pathMatch: 'full' }
+  { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({
