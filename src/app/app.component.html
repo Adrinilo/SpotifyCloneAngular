@@ -16,7 +16,7 @@
       <div *ngIf="!onLogin" class="w-1/5 h-full bg-cyan-900 rounded-md text-white">
         <app-library></app-library>
       </div>
-      <div [ngClass]="!onLogin ? 'bg-cyan-900 rounded-md' : ''">
+      <div [ngClass]="!onLogin ? 'bg-cyan-900 rounded-md w-4/5 h-full' : ''">
         <router-outlet></router-outlet>
       </div>
     </div>
