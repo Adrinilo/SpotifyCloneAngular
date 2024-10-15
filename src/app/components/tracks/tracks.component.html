@@ -1,5 +1,5 @@
-<div class="flex flex-col h-full p-0">
-    <div class="flex-1 overflow-y-scroll contenedor-scroll mb-2 w-full">
+<div class="flex flex-col h-full">
+    <div class="flex-1 overflow-y-scroll contenedor-scroll w-full rounded-md">
         <div class="flex items-center gap-5 text-white p-5 h-fit">
             <img src="{{playlist.images[0]}}" alt="cover" class="size-52 rounded-md shadow-xl">
             <div class="flex flex-col justify-end h-52 w-full">
@@ -9,7 +9,8 @@
                 </div>
                 <p class="text-sm">
                     <a href="{{playlist.owner.external_urls}}" target="_blank" rel="noopener noreferrer"
-                        class="font-bold hover:underline">{{playlist.owner.name}}</a><span *ngIf="playlist.followers > 0"> &#9679;
+                        class="font-bold hover:underline">{{playlist.owner.name}}</a><span
+                        *ngIf="playlist.followers > 0"> &#9679;
                         guardada
                         {{playlist.followers}} veces</span> &#9679; {{playlist.tracks_total}} canciones,
                     {{playlist.duration}}
@@ -37,25 +38,6 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="grid gap-4 justify-center ">
-            <div *ngFor="let track of tracks"
-                class="flex flex-col justify-between items-center gap-4 p-8 rounded-lg bg-slate-300">
-                <h2 class="text-3xl uppercase"> {{ track.name }} </h2>
-                <div class="flex w-full justify-between items-center">
-                    <div class="flex gap-2 items-center w-full">
-                        <img src="{{track.album!.images[0].url}}" alt="" class="size-24">
-                        <div class="flex flex-col gap-2">
-                            <p class="font-black">{{track.album?.name}}</p>
-                            <div *ngFor="let artist of track.artists" class="flex gap-2">
-                                <p>{{artist.name}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="{{track.external_urls}}" target="_blank" rel="noopener noreferrer"
-                        class="btn-spotify w-1/5 text-center">Ir a Spotify</a>
-                </div>
-            </div>
         </div>
     </div>
 </div>
