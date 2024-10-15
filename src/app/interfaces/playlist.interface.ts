@@ -1,13 +1,19 @@
+import { Owner } from "./owner.interface";
+import { Track } from "./track.interface";
+
 export interface Playlist {
     id: string;
-    name: string;
     description: string;
+    external_urls: string;
+    followers: number;
     href: string;
     images: string[];
-    public: boolean;
-    uri: string;
-    external_urls: string;
-    tracks: number;
+    name: string;
+    owner: Owner;
+    public: string;
+    tracks_total: number;
+    tracks: Track[];
     type: string;
-    owner_name: string;
+    uri: string;
+    duration: string;
 }
