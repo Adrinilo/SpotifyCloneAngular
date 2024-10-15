@@ -66,15 +66,19 @@ export class FormatService {
     if (total>50) {
       // Una canción de media dura más de 3 min
       // Vamos a suponer que cada cancion son 205 segundos de media
-      // 205ms -> readondeamos a 205000ms
+      // 205seg -> readondeamos a 205000ms
       // Con esta media por canción multiplicamos por el total
       durationMs = 205000 * total;
+      return this.durationStr(durationMs) + ' aproximadamente'
     } else {
       items.map((item: any) => {
         durationMs += item.track.duration_ms;
       })
+      return this.durationStr(durationMs);
     }
-    
+  }
+
+  private durationStr(durationMs: number): string {
     const totalSeconds = Math.floor(durationMs / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
