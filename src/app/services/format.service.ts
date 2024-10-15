@@ -83,11 +83,11 @@ export class FormatService {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     if (hours > 0 && minutes > 0) {
-      return `${hours} h ${minutes} m`;
+      return `${hours} h ${minutes} min`;
     } else if (hours > 0 && minutes <= 0) {
       return `${hours} h`;
     } else {
-      return `${minutes} m`;
+      return `${minutes} min`;
     }
   }
 }
