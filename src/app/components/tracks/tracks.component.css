@@ -13,8 +13,20 @@
     drop-shadow(0 1px 1px rgb(25 20 20 / 0.6));
 }
 
+.bg-cyan-925 {
+  background-color: rgb(19, 67, 85);
+}
+
 h1 {
-    font-size: 86px;
-    max-width: 100%;
-    transition: font-size 0.4s ease;
-  }  
+  font-size: 86px;
+  max-width: 100%;
+  transition: font-size 0.4s ease;
+}
+
+th, td {
+  padding: 0.5rem 0;
+}
+
+tr {
+  padding: 1rem 0;
+}

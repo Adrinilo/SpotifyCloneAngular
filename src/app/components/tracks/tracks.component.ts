@@ -93,7 +93,7 @@ export class TracksComponent implements OnInit, AfterViewInit {
   adjustFontSize() {
     let element = this.titleElement.nativeElement;
     let elementContainer = element.parentElement;
-    let fontSize = 86; // 96px, tamaño ideal si es posible
+    let fontSize = 86; // 86px, tamaño ideal si es posible
     let elementHeight = element.offsetHeight;
     let containerHeight = elementContainer.offsetHeight;
     
