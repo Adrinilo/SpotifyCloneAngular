@@ -62,8 +62,29 @@ export class SpotifyService {
     }
   }
 
-  public async getTracksPlaylists(playlistId: string) {
+  public async getPlaylistsId(playlistId: string) {
     try {
+      const response = await fetch(this.apiUrl + 'playlists/' + playlistId, {
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          this.authService.logout();
+        } else if (response.status === 400) {
+          window.location.href = '/';
+        }
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error al obtener la playlist:', error);
+      throw error;
+    }
+  }
 
       const response = await fetch(
         this.apiUrl + 'playlists/' + playlistId + '/tracks',
