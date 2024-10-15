@@ -1,17 +1,19 @@
 <div class="flex flex-col h-full p-0">
     <div class="flex-1 overflow-y-scroll contenedor-scroll mb-2 w-full">
         <div class="flex items-center gap-5 text-white p-5 h-fit">
-            <img src="{{playlist.images[0]}}" alt="cover" class="size-52 rounded-md">
+            <img src="{{playlist.images[0]}}" alt="cover" class="size-52 rounded-md shadow-xl">
             <div class="flex flex-col justify-end h-52 w-full">
                 <p>{{playlist.type}} {{playlist.public}}</p>
                 <div class="max-h-24 mb-5">
-                    <h1 class="font-bold leading-none" #titleRef >{{playlist.name}}</h1>
+                    <h1 class="font-bold leading-none" #titleRef>{{playlist.name}}</h1>
                 </div>
                 <p class="text-sm">
-                    <a href="{{playlist.owner.external_urls}}" class="font-bold">{{playlist.owner.name}}</a><span
-                        *ngIf="playlist.followers > 0"> &#9679; guardada
-                        {{playlist.followers}} veces</span> &#9679; {{playlist.tracks_total}} canciones, {{playlist.duration}}
-                    </p>
+                    <a href="{{playlist.owner.external_urls}}" target="_blank" rel="noopener noreferrer"
+                        class="font-bold hover:underline">{{playlist.owner.name}}</a><span *ngIf="playlist.followers > 0"> &#9679;
+                        guardada
+                        {{playlist.followers}} veces</span> &#9679; {{playlist.tracks_total}} canciones,
+                    {{playlist.duration}}
+                </p>
             </div>
         </div>
         <div class="h-fit px-5 bg-cyan-925">
