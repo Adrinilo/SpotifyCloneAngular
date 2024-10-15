@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnInit,
@@ -8,10 +9,9 @@ import {
 } from '@angular/core';
 import { Track } from '../../interfaces/track.interface';
 import { SpotifyService } from '../../services/spotify.service';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Playlist } from '../../interfaces/playlist.interface';
 import { FormatService } from '../../services/format.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tracks',
@@ -22,27 +22,19 @@ export class TracksComponent implements OnInit, AfterViewInit {
   playlist!: Playlist;
   tracks: Track[] = [];
   private scrollTimeout: any;
-  @ViewChild('textContent') textContent!: ElementRef;
-  private routerSubscription!: Subscription;
+  @ViewChild('titleRef') titleElement!: ElementRef;
 
   constructor(
     private spotifyService: SpotifyService,
     private formatService: FormatService,
     private route: ActivatedRoute,
-    private router: Router,
     private renderer: Renderer2,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      const playlistId = params['id'];
-      if (playlistId) {
-        this.getPlaylist(playlistId);
-      } else {
-        console.error('ID de playlist no encontrado en la ruta');
-      }
-    });
+    this.suscribeRoute();
 
     const scrollContainer =
       this.elRef.nativeElement.querySelector('.contenedor-scroll');
@@ -51,12 +43,22 @@ export class TracksComponent implements OnInit, AfterViewInit {
     this.renderer.listen(scrollContainer, 'scroll', () => {
       this.showScrollbar(scrollContainer);
     });
+  }
 
-    this.routerSubscription = this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        // Ejecuta el ajuste del tamaño de texto al cambiar de ruta
-        setTimeout(() => this.adjustFontSize(), 0);
+  ngAfterViewInit() {
+    this.suscribeRoute();
+  }
+
+  suscribeRoute() {
+    this.route.params.subscribe((params) => {
+      const playlistId = params['id'];
+      if (playlistId) {
+        this.getPlaylist(playlistId);
+      } else {
+        console.error('ID de playlist no encontrado en la ruta');
       }
+      // Aseguramos que Angular detecte los cambios
+      this.cdRef.detectChanges();
     });
   }
 
@@ -66,6 +68,11 @@ export class TracksComponent implements OnInit, AfterViewInit {
       .then((data) => {
         this.playlist = this.formatService.formatPlaylistItem(data);
         this.tracks = this.playlist.tracks;
+        if (this.titleElement) {
+          setTimeout(() => {
+            this.adjustFontSize(); // Este código se ejecuta después de que el DOM esté listo
+          }, 0);
+        }
       })
       .catch((error) => {
         console.error('Error fetching playlists:', error);
@@ -83,47 +90,28 @@ export class TracksComponent implements OnInit, AfterViewInit {
     }, 1000);
   }
 
-  ngAfterViewInit() {
-    // Ajusta el tamaño del texto inicialmente
-    this.adjustFontSize();
-    
-    // Escucha los cambios de ruta
-    this.routerSubscription = this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        // Ejecuta el ajuste del tamaño de texto al cambiar de ruta
-        setTimeout(() => this.adjustFontSize(), 0);
-      }
-    });
-  }
-
   adjustFontSize() {
-    const textElement = this.textContent.nativeElement;
-    let fontSize = parseFloat(window.getComputedStyle(textElement).fontSize);
-
-    // Mientras el texto esté clamped (ocupando más de 1 línea), reducimos el tamaño de la fuente
-    while (this.checkNumberLines(textElement)) {
-      fontSize--;
-      this.renderer.setStyle(textElement, 'font-size', `${fontSize}px`);
+    let element = this.titleElement.nativeElement;
+    let elementContainer = element.parentElement;
+    let fontSize = 86; // 96px, tamaño ideal si es posible
+    let elementHeight = element.offsetHeight;
+    let containerHeight = elementContainer.offsetHeight;
+    
+    if (elementHeight > containerHeight) {
+      // calculamos por regla de 3 una medida que encage dentro del alto máximo del contenedor
+      // Realizamos la operación directamente ya que si usamos una variable puede no modificarse sincronizado
+      element.style.fontSize = `${(containerHeight * fontSize) / elementHeight}px`;
+    } else {
+      // Solo si el tamaño es más grande del limite
+      // Ajustamos el tamaño al original
+      element.style.fontSize = `${fontSize}px`;
     }
-  }
-
-  checkNumberLines(element: HTMLElement): boolean {
-    const computedStyle = window.getComputedStyle(element);
-    const lineHeight = parseFloat(computedStyle.lineHeight);
-    const height = element.scrollHeight;
-    const numberOfLines = Math.round(height / lineHeight);
-    return numberOfLines > 1;
   }
 
   ngOnDestroy() {
-     // Limpiar el timeout cuando el componente sea destruido
-     if (this.scrollTimeout) {
+    // Limpiar el timeout cuando el componente sea destruido
+    if (this.scrollTimeout) {
       clearTimeout(this.scrollTimeout);
-    }
-
-    // Asegúrate de limpiar la suscripción cuando el componente se destruya
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
     }
   }
 }
