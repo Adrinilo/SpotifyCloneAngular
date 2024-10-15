@@ -14,7 +14,7 @@
 }
 
 h1 {
-    font-size: 72px;
+    font-size: 86px;
     max-width: 100%;
-    transition: font-size 0.3s ease;
+    transition: font-size 0.4s ease;
   }  
