@@ -1,7 +1,8 @@
-<div class="p-5 flex flex-col gap-2 text-white">
+<div class="flex flex-col h-full gap-2 p-5 text-white">
   <div class="grid grid-cols-4 gap-4 justify-center">
     <div *ngFor="let list of playlists"
-      class="bg-cyan-800 hover:bg-cyan-700 rounded-md flex items-center gap-2 h-14">
+      class="bg-cyan-800 hover:bg-cyan-700 rounded-md flex items-center gap-2 h-14"
+      (click)="playlistDetails(list.id)">
       <img src="{{list.images[0]}}" alt="cover" class="size-14 rounded-l-md">
       <p class="uppercase text-ellipsis"> {{ list.name }} </p>
     </div>

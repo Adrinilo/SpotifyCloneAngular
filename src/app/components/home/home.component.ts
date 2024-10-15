@@ -3,6 +3,7 @@ import { SpotifyService } from '../../services/spotify.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { Playlist } from '../../interfaces/playlist.interface';
+import { FormatService } from '../../services/format.service';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private spotifyService: SpotifyService,
     private authService: AuthService,
+    private formatService: FormatService,
     private router: Router
   ) {}
 
@@ -33,7 +35,16 @@ export class HomeComponent implements OnInit {
       this.spotifyService
         .getUserPlaylists()
         .then((data) => {
-          this.playlists = this.formatPlaylists(data.items);
+          this.playlists = this.formatService.formatPlaylists(data.items).slice(0,8);
+        })
+        .catch((error) => {
+          console.error('Error fetching playlists:', error);
+        });
+        this.spotifyService
+        .getRecentlyPlayed()
+        .then((data) => {
+          this.recentlyPlayed = data.items;
+          console.log(this.recentlyPlayed);
         })
         .catch((error) => {
           console.error('Error fetching playlists:', error);
@@ -44,23 +55,7 @@ export class HomeComponent implements OnInit {
       : this.router.navigate(['/login']); // Si no está logueado redirigimos a login
   }
 
-  formatPlaylists(items: any[]): Playlist[] {
-    items = items.slice(0,8);
-    return items.map((item: any) => {
-      let playlist: Playlist = {
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        href: item.href,
-        images: item.images ? item.images.map((img: any) => img.url) : [],
-        tracks: item.tracks ? item.tracks.total : 0,
-        public: item.public,
-        uri: item.uri,
-        external_urls: item.external_urls.spotify,
-        type: item.type == 'playlist' ? 'Lista' : item.type,
-        owner_name: item.owner.display_name
-      };
-      return playlist;
-    });
+  playlistDetails(id: string) {
+    this.router.navigate(['/playlist', id]);
   }
 }

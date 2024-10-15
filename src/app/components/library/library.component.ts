@@ -8,6 +8,7 @@ import {
 import { Playlist } from '../../interfaces/playlist.interface';
 import { SpotifyService } from '../../services/spotify.service';
 import { Router } from '@angular/router';
+import { FormatService } from '../../services/format.service';
 
 @Component({
   selector: 'app-library',
@@ -20,9 +21,10 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
   constructor(
     private spotifyService: SpotifyService,
+    private formatService: FormatService,
+    private router: Router,
     private renderer: Renderer2,
-    private elRef: ElementRef,
-    private router: Router
+    private elRef: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -31,7 +33,7 @@ export class LibraryComponent implements OnInit, OnDestroy {
       this.spotifyService
         .getUserPlaylists()
         .then((data) => {
-          this.playlists = this.formatPlaylists(data.items);
+          this.playlists = this.formatService.formatPlaylists(data.items);
         })
         .catch((error) => {
           console.error('Error fetching playlists:', error);
@@ -49,25 +51,6 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
   playlistDetails(id: string) {
     this.router.navigate(['/playlist', id]);
-  }
-
-  formatPlaylists(items: any[]): Playlist[] {
-    return items.map((item: any) => {
-      let playlist: Playlist = {
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        href: item.href,
-        images: item.images ? item.images.map((img: any) => img.url) : [],
-        tracks: item.tracks ? item.tracks.total : 0,
-        public: item.public,
-        uri: item.uri,
-        external_urls: item.external_urls.spotify,
-        type: item.type == 'playlist' ? 'Lista' : item.type,
-        owner_name: item.owner.display_name,
-      };
-      return playlist;
-    });
   }
 
   showScrollbar(container: HTMLElement): void {
