@@ -7,14 +7,14 @@
                 <div class="max-h-24 mb-5">
                     <h1 class="font-bold leading-none" #titleRef>{{playlist.name}}</h1>
                 </div>
-                <p class="text-sm">
+                <div class="flex items-center text-sm">
                     <a href="{{playlist.owner.external_urls}}" target="_blank" rel="noopener noreferrer"
-                        class="font-bold hover:underline">{{playlist.owner.name}}</a><span
-                        *ngIf="playlist.followers > 0"> &#9679;
-                        guardada
-                        {{playlist.followers}} veces</span> &#9679; {{playlist.tracks_total}} canciones,
-                    {{playlist.duration}}
-                </p>
+                        class="font-bold hover:underline text-white">{{playlist.owner.name}}</a>
+                    <p class="text-slate-300"><span *ngIf="playlist.followers > 0">
+                        <span class="text-xxs mx-1">&#9679;</span>guardada {{playlist.followers}} veces</span>
+                        <span class="text-xxs mx-1">&#9679;</span>{{playlist.tracks_total}} canciones,{{playlist.duration}}
+                    </p>
+                </div>
             </div>
         </div>
         <div class="h-fit px-5 bg-cyan-925">
