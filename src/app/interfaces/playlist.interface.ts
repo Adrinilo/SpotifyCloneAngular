@@ -1,4 +1,4 @@
-import { Owner } from "./owner.interface";
+import { User } from "./user.interface";
 import { Track } from "./track.interface";
 
 export interface Playlist {
@@ -9,7 +9,7 @@ export interface Playlist {
     href: string;
     images: string[];
     name: string;
-    owner: Owner;
+    owner: User;
     public: string;
     tracks_total: number;
     tracks: Track[];

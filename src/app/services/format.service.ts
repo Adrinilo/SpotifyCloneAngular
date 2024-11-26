@@ -3,7 +3,7 @@ import { Playlist } from '../interfaces/playlist.interface';
 import { Track } from '../interfaces/track.interface';
 import { Album } from '../interfaces/album.interface';
 import { Artist } from '../interfaces/artist.interface';
-import { Owner } from '../interfaces/owner.interface';
+import { User } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +18,7 @@ export class FormatService {
   }
 
   public formatPlaylistItem(item: any): Playlist {
+    //const owner = await this.formatOwner(item.owner.id); // Espera a que se resuelva el owner
     let playlist: Playlist = {
       id: item.id,
       description: item.description,
@@ -26,7 +27,7 @@ export class FormatService {
       href: item.href,
       images: item.images ? item.images.map((img: any) => img.url) : [],
       name: item.name,
-      owner: this.formatOwner(item.owner),
+      owner: this.formatUser(item.owner),
       public: item.public == true ? 'pública' : 'privada',
       tracks_total: item.tracks.total ? item.tracks.total : 0,
       tracks: item.tracks.items ? this.formatTracks(item.tracks.items) : [],
@@ -52,13 +53,15 @@ export class FormatService {
     });
   }
 
-  private formatOwner(item: any): Owner {
-    let owner: Owner = {
-      external_urls: item.external_urls.spotify,
       id: item.id,
       name: item.display_name ? item.display_name : '',
     };
-    return owner;
+    return user;
+  }
+
+  private async formatOwner(userId: string): Promise<User> {
+    const owner = await this.spotifyService.getUserById(userId);
+    return this.formatUser(owner);
   }
 
   private formatDuration(items: any, total: number): string {    
