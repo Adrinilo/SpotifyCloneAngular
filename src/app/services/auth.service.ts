@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { SPOTIFY_SCOPES_STRING } from '../constants/spotify-scopes';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ export class AuthService {
   private redirectUri = 'http://localhost:4200/callback';
   private authEndpoint = 'https://accounts.spotify.com/authorize';
   private responseType = 'token';
-  private scope = 'user-read-private user-read-email playlist-read-private';
+  private scope = SPOTIFY_SCOPES_STRING;
 
   // Comprueba si el token de acceso existe y es válido
   isLoggedIn(): boolean {
