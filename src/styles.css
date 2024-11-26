@@ -23,3 +23,8 @@
   border-radius: 3.75rem;
 }
 
+/*Estiliza la pista de la barra de scroll (el canal donde se mueve el "thumb")*/
+.contenedor-scroll.scrolling::-webkit-scrollbar-track {
+  /* background-color: transparent; /* Color del fondo del track */
+  background-color: rgb(19, 67, 85); /* Color del fondo del track */
+}
