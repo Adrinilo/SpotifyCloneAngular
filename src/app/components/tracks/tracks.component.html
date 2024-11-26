@@ -1,6 +1,6 @@
 <div class="flex flex-col h-full">
     <div class="flex-1 overflow-y-scroll contenedor-scroll w-full rounded-md">
-        <div class="flex items-center gap-5 text-white p-5 h-fit">
+        <div class="flex items-center gap-5 text-white p-5 h-fit" *ngIf="playlist">
             <img src="{{playlist.images[0]}}" alt="cover" class="size-52 rounded-md shadow-xl">
             <div class="flex flex-col justify-end h-52 w-full">
                 <p>{{playlist.type}} {{playlist.public}}</p>
@@ -8,17 +8,20 @@
                     <h1 class="font-bold leading-none" #titleRef>{{playlist.name}}</h1>
                 </div>
                 <div class="flex items-center text-sm">
-                    <a href="{{playlist.owner.external_urls}}" target="_blank" rel="noopener noreferrer"
+                    <div class="flex items-center">
+                        <!--<img src="{{playlist.owner.images[0]}}" alt="owner_cover">-->
+                        <a href="{{playlist.owner.external_urls}}" target="_blank" rel="noopener noreferrer"
                         class="font-bold hover:underline text-white">{{playlist.owner.name}}</a>
-                    <p class="text-slate-300"><span *ngIf="playlist.followers > 0">
+                    </div>
+                    <p class="text-slate-300 leading-none"><span *ngIf="playlist.followers > 0">
                         <span class="text-xxs mx-1">&#9679;</span>guardada {{playlist.followers}} veces</span>
-                        <span class="text-xxs mx-1">&#9679;</span>{{playlist.tracks_total}} canciones,{{playlist.duration}}
+                        <span class="text-xxs mx-1">&#9679;</span>{{playlist.tracks_total}} canciones, {{playlist.duration}}
                     </p>
                 </div>
             </div>
         </div>
         <div class="h-fit px-5 bg-cyan-925">
-            <table class="text-white w-full">
+            <table class="text-slate-300 w-full">
                 <thead class="border-b text-slate-300">
                     <tr class="text-left">
                         <th class="text-center">#</th>
@@ -29,7 +32,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let track of tracks; let i = index">
+                    <tr *ngFor="let track of tracks; let i = index" 
+                    class="hover:bg-cyan-700 rounded-md"
+                    (dblclick)="onTrackSelected(track.id)">
                         <td class="text-center">{{i + 1}}</td>
                         <td>{{track.name}}</td>
                         <td>{{track.album?.name}}</td>

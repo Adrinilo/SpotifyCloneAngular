@@ -79,6 +79,18 @@ export class TracksComponent implements OnInit, AfterViewInit {
       });
   }
 
+  onTrackSelected(trackId: string) {
+    this.spotifyService
+    .getTrackById(trackId)
+    .then((data) => {
+        console.log('Canción seleccionada: ' + data.name);
+        console.log(data.preview_url);
+      })
+      .catch((error) => {
+        console.error('Error fetching track:', error);
+      });
+  }
+
   showScrollbar(container: HTMLElement): void {
     // Consultar componente 'Library' para anotaciones
     this.renderer.addClass(container, 'scrolling');
@@ -96,11 +108,13 @@ export class TracksComponent implements OnInit, AfterViewInit {
     let fontSize = 86; // 86px, tamaño ideal si es posible
     let elementHeight = element.offsetHeight;
     let containerHeight = elementContainer.offsetHeight;
-    
+
     if (elementHeight > containerHeight) {
       // calculamos por regla de 3 una medida que encage dentro del alto máximo del contenedor
       // Realizamos la operación directamente ya que si usamos una variable puede no modificarse sincronizado
-      element.style.fontSize = `${(containerHeight * fontSize) / elementHeight}px`;
+      element.style.fontSize = `${
+        (containerHeight * fontSize) / elementHeight
+      }px`;
     } else {
       // Solo si el tamaño es más grande del limite
       // Ajustamos el tamaño al original
