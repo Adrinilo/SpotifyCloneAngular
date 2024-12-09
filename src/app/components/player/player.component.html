@@ -1,4 +1,4 @@
-<div class="grid grid-cols-3 gap-3 px-4 items-center text-white h-20" *ngIf="track">
+<div class="grid grid-cols-3 gap-3 px-4 items-center text-white h-20" *ngIf="isPlaying">
     <div class="flex gap-2">
         <img *ngIf="track.album" src="{{track.album.images[0]}}" alt="cover" class="size-16 rounded-md">
         <div class="flex flex-col justify-center">
@@ -6,14 +6,22 @@
             <p class="text-xs text-slate-300">{{track.artists[0].name}}</p>
         </div>
     </div>
-    <div class="flex flex-col">
-        <div class="flex justify-center">
+    <div class="flex flex-col items-center">
+        <!-- <div class="flex justify-center">
             <button (click)="togglePlay()" class="play-pause-button">
                 <span *ngIf="isPlaying" class="icon-pause text-3xl">⏸️</span>
                 <span *ngIf="!isPlaying" class="icon-play text-3xl">▶️</span>
               </button>
         </div>
-        <div></div>
+        <div></div> -->
+        <div class="audio-player">
+            <audio #audioPlayer controls>
+                <source [src]="track.preview_url" type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        <!-- <iframe src="https://open.spotify.com/embed/track/4Ny1rlxyM3Lfo37Q0e7Kaj" width="300" height="80"
+            frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe> -->
     </div>
     <div class="flex gap-3 justify-end">
         <img *ngIf="track.album" src="{{track.album.images[2]}}" alt="cover" class="size-6 rounded-md">

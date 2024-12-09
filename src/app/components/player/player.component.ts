@@ -18,25 +18,26 @@ export class PlayerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.spotifyService
+    /*this.spotifyService
       .getPlaybackState()
       .then((data) => {
         this.track = this.formatService.formatTrackPlaying(data.item);
-        this.isPlaying = data.is_playing;
+        //this.isPlaying = data.is_playing;
+        this.isPlaying = true;
         //console.log(data);
       })
       .catch((error) => {
         console.error('Error getting state:', error);
-      });
+      });*/
   }
 
   togglePlay(): void {
     this.isPlaying = !this.isPlaying;
 
     if (this.isPlaying) {
-      this.spotifyService.resumePlayback(); // Reanuda la reproducción
+      //this.spotifyService.resumePlayback(); // Reanuda la reproducción
     } else {
-      this.spotifyService.pausePlayback(); // Pausa la reproducción
+      //this.spotifyService.pausePlayback(); // Pausa la reproducción
     }
   }
 }

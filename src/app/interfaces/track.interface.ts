@@ -7,4 +7,5 @@ export interface Track {
     album?: Album;
     artists: Artist[];
     external_urls?: string;
+    preview_url: string;
 }

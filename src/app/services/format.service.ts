@@ -51,6 +51,7 @@ export class FormatService {
         external_urls: item.track.external_urls.spotify
           ? item.track.external_urls.spotify
           : '',
+        preview_url: item.preview_url,
       };
       return tracks;
     });
@@ -65,6 +66,7 @@ export class FormatService {
       external_urls: item.external_urls.spotify
         ? item.external_urls.spotify
         : '',
+      preview_url: item.preview_url,
     };
     return track;
   }
