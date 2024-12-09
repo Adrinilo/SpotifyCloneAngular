@@ -2,6 +2,13 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 
+declare global {
+  interface Window {
+    Spotify: any;
+    onSpotifyWebPlaybackSDKReady: () => void;
+  }
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -9,8 +16,17 @@ export class SpotifyService {
   private accessToken = localStorage.getItem('spotify_access_token');
   //private userId = localStorage.getItem('user_id');
   private apiUrl = 'https://api.spotify.com/v1/';
+  private player: any;
+  private sdkReady: Promise<void>;
+  private deviceId: string | null = null;
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private authService: AuthService, private http: HttpClient) {
+    this.sdkReady = new Promise((resolve) => {
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        resolve(); // El SDK está listo para usarse
+      };
+    });
+  }
 
   public async getUserProfile() {
     const response = await fetch(this.apiUrl + 'me', {
@@ -56,9 +72,10 @@ export class SpotifyService {
 
   public async getUserPlaylists() {
     const limit = 50;
+    const offset = 0;
     try {
       const response = await fetch(
-        this.apiUrl + 'me/playlists?limit=' + limit,
+        this.apiUrl + `me/playlists?limit=${limit}&${offset}`,
         {
           headers: {
             Authorization: `Bearer ${this.accessToken}`,
@@ -161,14 +178,11 @@ export class SpotifyService {
 
   public async getTrackById(trackId: string) {
     try {
-      const response = await fetch(
-        this.apiUrl + 'tracks/' + trackId,
-        {
-          headers: {
-            Authorization: `Bearer ${this.accessToken}`,
-          },
-        }
-      );
+      const response = await fetch(this.apiUrl + 'tracks/' + trackId, {
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
@@ -181,48 +195,121 @@ export class SpotifyService {
   }
 
   public async getPlaybackState() {
-    const response = await fetch(this.apiUrl + 'me/player', {
-      headers: {
-        Authorization: `Bearer ${this.accessToken}`,
-      },
+    try {
+      const response = await fetch(this.apiUrl + 'me/player', {
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error al obtener el estado del reproductor:', error);
+      throw error;
+    }
+  }
+
+  public async initializePlayer(): Promise<void> {
+    await this.sdkReady; // Espera a que el SDK esté listo
+
+    // Inicializar el reproductor
+    this.player = new window.Spotify.Player({
+      name: 'Angular Spotify Player',
+      getOAuthToken: (cb: (token: string) => void) =>
+        this.accessToken == null
+          ? this.authService.logout()
+          : cb(this.accessToken),
     });
-    return await response.json();
+
+    // Configurar listeners
+    this.addListeners();
+
+    // Conectar el reproductor
+    const connected = await this.player.connect();
+    if (connected) {
+      console.log('Reproductor conectado exitosamente.');
+    } else {
+      console.error('Error al conectar el reproductor.');
+    }
   }
 
-  // Pausar reproducción
-  pausePlayback(): void {
-    this.http
-      .put(
-        `${this.apiUrl}me/player/pause`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${this.accessToken}`,
-            'Content-Type': 'application/json',
-          },
+  //Reproduce una canción específica
+  playTrack(trackUri: string): void {
+    if (!this.deviceId) {
+      console.error('El dispositivo no está listo.');
+      return;
+    }
+
+    fetch(
+      `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify({ uris: [trackUri] }),
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          console.log('Reproducción iniciada.');
+        } else {
+          console.error('Error al iniciar la reproducción:', response);
         }
-      )
-      .subscribe({
-        next: () => console.log('Playback paused'),
-        error: (err: any) => console.error('Error pausing playback:', err +'\n' + err.error.error.message),
+      })
+      .catch((error) => {
+        console.error('Error al realizar la solicitud de reproducción:', error);
       });
   }
 
-  // Reanudar reproducción
-  resumePlayback(): void {
-    this.http
-      .put(
-        `${this.apiUrl}me/player/play`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${this.accessToken}`,
-          },
-        }
-      )
-      .subscribe({
-        next: () => console.log('Playback resumed'),
-        error: (err: any) => console.error('Error resuming playback:', err +'\n' + err.error.error.message),
-      });
+  private addListeners(): void {
+    // Listener: Cuando el reproductor está listo
+    this.player.addListener('ready', ({ device_id }: { device_id: string }) => {
+      this.deviceId = device_id;
+      console.log('Reproductor listo con ID:', device_id);
+    });
+
+    // Listener: Cuando el reproductor no está listo
+    this.player.addListener(
+      'not_ready',
+      ({ device_id }: { device_id: string }) => {
+        console.error('El reproductor no está listo con ID:', device_id);
+      }
+    );
+
+    // Listener: Cambios en el estado del reproductor
+    this.player.addListener('player_state_changed', (state: any) => {
+      console.log('Estado del reproductor:', state);
+    });
+
+    // Listener: Errores de reproducción
+    this.player.addListener(
+      'initialization_error',
+      ({ message }: { message: string }) => {
+        console.error('Error de inicialización:', message);
+      }
+    );
+
+    this.player.addListener(
+      'authentication_error',
+      ({ message }: { message: string }) => {
+        console.error('Error de autenticación:', message);
+      }
+    );
+
+    this.player.addListener(
+      'account_error',
+      ({ message }: { message: string }) => {
+        console.error('Error de cuenta:', message);
+      }
+    );
+
+    this.player.addListener(
+      'playback_error',
+      ({ message }: { message: string }) => {
+        console.error('Error de reproducción:', message);
+      }
+    );
   }
 }

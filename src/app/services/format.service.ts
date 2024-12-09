@@ -13,6 +13,7 @@ export class FormatService {
   constructor(private spotifyService: SpotifyService) {}
 
   public formatPlaylists(items: any[]): Playlist[] {
+    items = items.filter((playlist) => playlist !== null); // La api puede devolver elementos nulos
     return items.map((item: any) => {
       return this.formatPlaylistItem(item);
     });
@@ -52,6 +53,7 @@ export class FormatService {
           ? item.track.external_urls.spotify
           : '',
         preview_url: item.preview_url,
+        uri: item.uri,
       };
       return tracks;
     });
@@ -67,6 +69,7 @@ export class FormatService {
         ? item.external_urls.spotify
         : '',
       preview_url: item.preview_url,
+      uri: item.uri,
     };
     return track;
   }

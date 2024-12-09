@@ -1,0 +1,16 @@
+<div [ngClass]="track.id ? '' : 'h-2'">
+    <div class="grid grid-cols-3 gap-3 px-4 items-center text-white h-20" *ngIf="track.id">
+        <div class="flex gap-2">
+            <img *ngIf="track.album" src="{{track.album.images[0]}}" alt="cover" class="size-16 rounded-md">
+            <div class="flex flex-col justify-center">
+            <p>{{track.name}}</p>
+            <p class="text-xs text-slate-300">{{track.artists[0].name}}</p>
+        </div>
+    </div>
+    <div class="flex flex-col items-center">
+        
+    </div>
+    <div class="flex gap-3 justify-end">
+    </div>
+</div>
+</div>

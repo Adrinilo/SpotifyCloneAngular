@@ -12,6 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LibraryComponent } from './components/library/library.component';
 import { PlayerComponent } from './components/player/player.component';
+import { PlaybacksdkComponent } from './components/playbacksdk/playbacksdk.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -33,6 +34,7 @@ export const routes: Routes = [
     NavbarComponent,
     LibraryComponent,
     PlayerComponent,
+    PlaybacksdkComponent,
   ],
   imports: [BrowserModule, HttpClientModule, RouterModule.forRoot(routes)],
   providers: [],

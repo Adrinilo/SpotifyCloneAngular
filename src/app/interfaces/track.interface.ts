@@ -8,4 +8,5 @@ export interface Track {
     artists: Artist[];
     external_urls?: string;
     preview_url: string;
+    uri: string;
 }
