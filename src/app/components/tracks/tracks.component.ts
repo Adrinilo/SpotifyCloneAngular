@@ -12,6 +12,7 @@ import { SpotifyService } from '../../services/spotify.service';
 import { ActivatedRoute } from '@angular/router';
 import { Playlist } from '../../interfaces/playlist.interface';
 import { FormatService } from '../../services/format.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-tracks',
@@ -27,6 +28,7 @@ export class TracksComponent implements OnInit, AfterViewInit {
   constructor(
     private spotifyService: SpotifyService,
     private formatService: FormatService,
+    private dataService: DataService,
     private route: ActivatedRoute,
     private renderer: Renderer2,
     private elRef: ElementRef,
@@ -81,10 +83,12 @@ export class TracksComponent implements OnInit, AfterViewInit {
 
   onTrackSelected(trackId: string) {
     this.spotifyService
-    .getTrackById(trackId)
-    .then((data) => {
+      .getTrackById(trackId)
+      .then((data) => {
         console.log('Canción seleccionada: ' + data.name);
-        console.log(data.preview_url);
+        this.dataService.setCurrentTrack(
+          this.formatService.formatTrackPlaying(data)
+        );
       })
       .catch((error) => {
         console.error('Error fetching track:', error);
