@@ -24,17 +24,15 @@ export class PlaybacksdkComponent implements OnInit {
     // Obtener la URL actual
     const currentRoute = this.router.url;
 
-    // Verificar si se debe ejecutar la acción
+    // Verificar si se debe ejecutar la acción, controlando error en login
     if (!currentRoute.includes('login')) {
-      // Inicializa el reproductor controlando error en login
-      this.spotifyService.initializePlayer();
+      this.spotifyService.initializePlayer(); // Inicializa el reproductor 
     }
 
     // Suscribirse al observable para recibir actualizaciones
     this.dataService.currentTrack$.subscribe((track) => {
       this.track = track;
-      this.playTrack();
-      //this.track = track.id ? track : {} as Track;
+      this.track && this.playTrack();
     });
   }
 

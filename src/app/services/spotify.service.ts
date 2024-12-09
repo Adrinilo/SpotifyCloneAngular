@@ -210,27 +210,46 @@ export class SpotifyService {
   }
 
   public async initializePlayer(): Promise<void> {
-    await this.sdkReady; // Espera a que el SDK esté listo
+    if (!this.accessToken) {
+      console.error('No se puede inicializar el reproductor: falta el token de acceso.');
+      return;
+    }
 
-    // Inicializar el reproductor
+    try {
+      // Espera a que el SDK esté listo
+      await this.sdkReady;
+
+      // Crear el reproductor
+      this.createPlayer();
+
+      // Configurar listeners
+      this.addListeners();
+
+      // Conectar el reproductor
+      this.connectPlayer();
+
+    } catch (error) {
+      console.error('Error al inicializar el reproductor:', error);
+    }
+  }
+
+  private createPlayer(): void {
     this.player = new window.Spotify.Player({
       name: 'Angular Spotify Player',
       getOAuthToken: (cb: (token: string) => void) =>
-        this.accessToken == null
-          ? this.authService.logout()
-          : cb(this.accessToken),
+        this.accessToken
+          ? cb(this.accessToken)
+          : console.error('No se pudo proporcionar el token de acceso.'),
     });
+  }
 
-    // Configurar listeners
-    this.addListeners();
-
-    // Conectar el reproductor
-    const connected = await this.player.connect();
-    if (connected) {
-      console.log('Reproductor conectado exitosamente.');
-    } else {
-      console.error('Error al conectar el reproductor.');
-    }
+  private async connectPlayer(): Promise<void> {
+    const connected = await this.player?.connect();
+      if (connected) {
+        console.log('Reproductor conectado exitosamente.');
+      } else {
+        console.error('Error al conectar el reproductor.');
+      }
   }
 
   //Reproduce una canción específica
