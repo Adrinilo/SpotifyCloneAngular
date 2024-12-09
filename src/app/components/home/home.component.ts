@@ -13,6 +13,7 @@ import { FormatService } from '../../services/format.service';
 export class HomeComponent implements OnInit {
   user: any;
   playlists: Playlist[] = [];
+  //recentlyPlayed: Playlist[] = [];
 
   constructor(
     private spotifyService: SpotifyService,
@@ -40,15 +41,15 @@ export class HomeComponent implements OnInit {
         .catch((error) => {
           console.error('Error fetching playlists:', error);
         });
-        this.spotifyService
+        /*this.spotifyService
         .getRecentlyPlayed()
         .then((data) => {
           this.recentlyPlayed = data.items;
-          console.log(this.recentlyPlayed);
+          //console.log(this.recentlyPlayed);
         })
         .catch((error) => {
           console.error('Error fetching playlists:', error);
-        });
+        });*/
     }
     this.authService.isLoggedIn()
       ? '' // Si está logueado no hacemos nada
