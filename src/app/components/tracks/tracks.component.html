@@ -34,7 +34,7 @@
                 <tbody>
                     <tr *ngFor="let track of tracks; let i = index" 
                     class="border-gray-200 transition-all duration-200 hover:bg-cyan-700 hover:rounded-lg"
-                    (dblclick)="onTrackSelected(track.id)">
+                    (dblclick)="onTrackSelected(track)">
                         <td class="text-center">{{i + 1}}</td>
                         <td>{{track.name}}</td>
                         <td>{{track.album?.name}}</td>

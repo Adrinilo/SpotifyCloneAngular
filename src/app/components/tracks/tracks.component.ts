@@ -80,20 +80,9 @@ export class TracksComponent implements OnInit, AfterViewInit {
       });
   }
 
-  onTrackSelected(trackId: string) {
-    this.spotifyService
-      .getTrackById(trackId)
-      .then((data) => {
-        console.log('Canción seleccionada: ' + data.name);
-        this.spotifyService.getTrackById(data.id).then(track => {
-          const currentTrack = this.formatService.formatTrackItem(track);
-          this.spotifyService.setCurrentTrack(currentTrack);
-          this.spotifyService.playTrack(currentTrack.uri);
-        })
-      })
-      .catch((error) => {
-        console.error('Error fetching track:', error);
-      });
+  onTrackSelected(track: Track) {
+    console.log('Canción seleccionada: ' + track.name);
+    this.spotifyService.playTrack(track.uri);
   }
 
   showScrollbar(container: HTMLElement): void {

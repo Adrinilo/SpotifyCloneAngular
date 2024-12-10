@@ -379,9 +379,4 @@ export class SpotifyService {
       }
     );
   }
-
-    // Método para actualizar el estado de la pista actual
-    setCurrentTrack(track: Track) {
-      this.currentTrackSubject.next(track);
-    }
 }
