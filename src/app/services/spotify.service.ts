@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
-import { Track } from '../interfaces/track.interface';
+import { Track, TrackPlaying } from '../interfaces/track.interface';
 
 declare global {
   interface Window {
@@ -260,17 +260,23 @@ export class SpotifyService {
   }
 
   //Reproduce una canción
-  playTrack(trackUri: string): void {
+  playTrack(track: TrackPlaying): void {
     if (!this.accessToken && !this.deviceId) {
       console.error('El dispositivo no está listo.');
       return;
+    }
+
+    // Construir el cuerpo de la solicitud con o sin posición en milisegundos
+    const body: any = { uris: [track.uri] };
+    if (track.position_ms !== undefined) {
+      body.position_ms = track.position_ms;
     }
 
     fetch(
       `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
       {
         method: 'PUT',
-        body: JSON.stringify({ uris: [trackUri] }),
+        body: JSON.stringify(body),
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
           'Content-Type': 'application/json',

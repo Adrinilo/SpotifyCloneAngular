@@ -82,7 +82,7 @@ export class TracksComponent implements OnInit, AfterViewInit {
 
   onTrackSelected(track: Track) {
     console.log('Canción seleccionada: ' + track.name);
-    this.spotifyService.playTrack(track.uri);
+    this.spotifyService.playTrack(this.formatService.formatTrackPlaying(track));
   }
 
   showScrollbar(container: HTMLElement): void {

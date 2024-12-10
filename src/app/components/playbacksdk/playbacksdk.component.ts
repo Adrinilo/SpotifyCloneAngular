@@ -58,6 +58,6 @@ export class PlaybacksdkComponent implements OnInit {
   togglePlay() {
     this.isPlaying
       ? this.spotifyService.pauseTrack()
-      : this.spotifyService.playTrack(this.track.uri);
+      : this.spotifyService.playTrack(this.track);
   }
 }
