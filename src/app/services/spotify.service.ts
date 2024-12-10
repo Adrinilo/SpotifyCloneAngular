@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
+import { Track } from '../interfaces/track.interface';
 
 declare global {
   interface Window {
@@ -20,7 +22,13 @@ export class SpotifyService {
   private sdkReady: Promise<void>;
   private deviceId: string | null = null;
 
-  constructor(private authService: AuthService, private http: HttpClient) {
+  private currentTrackSubject = new BehaviorSubject<any>({} as Track);
+  currentTrack$ = this.currentTrackSubject.asObservable();
+
+  private isPlayingSubject = new BehaviorSubject<boolean>(false);
+  isPlaying$ = this.isPlayingSubject.asObservable();
+
+  constructor(private authService: AuthService) {
     this.sdkReady = new Promise((resolve) => {
       window.onSpotifyWebPlaybackSDKReady = () => {
         resolve(); // El SDK está listo para usarse
@@ -181,6 +189,7 @@ export class SpotifyService {
       const response = await fetch(this.apiUrl + 'tracks/' + trackId, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json',
         },
       });
       if (!response.ok) {
@@ -211,7 +220,9 @@ export class SpotifyService {
 
   public async initializePlayer(): Promise<void> {
     if (!this.accessToken) {
-      console.error('No se puede inicializar el reproductor: falta el token de acceso.');
+      console.error(
+        'No se puede inicializar el reproductor: falta el token de acceso.'
+      );
       return;
     }
 
@@ -227,7 +238,6 @@ export class SpotifyService {
 
       // Conectar el reproductor
       this.connectPlayer();
-
     } catch (error) {
       console.error('Error al inicializar el reproductor:', error);
     }
@@ -245,16 +255,20 @@ export class SpotifyService {
 
   private async connectPlayer(): Promise<void> {
     const connected = await this.player?.connect();
-      if (connected) {
-        console.log('Reproductor conectado exitosamente.');
-      } else {
-        console.error('Error al conectar el reproductor.');
-      }
+    if (connected) {
+      console.log('Reproductor conectado exitosamente.');
+    } else {
+      console.error('Error al conectar el reproductor.');
+    }
   }
 
-  //Reproduce una canción específica
+  isPlaying(): boolean {
+    return this.player?.is_playing;
+  }
+
+  //Reproduce una canción
   playTrack(trackUri: string): void {
-    if (!this.deviceId) {
+    if (!this.accessToken && !this.deviceId) {
       console.error('El dispositivo no está listo.');
       return;
     }
@@ -282,6 +296,35 @@ export class SpotifyService {
       });
   }
 
+  //Pausa una canción
+  pauseTrack(): void {
+    if (!this.accessToken && !this.deviceId) {
+      console.error('El dispositivo no está listo.');
+      return;
+    }
+
+    fetch(
+      `https://api.spotify.com/v1/me/player/pause?device_id=${this.deviceId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          console.log('Reproducción pausada.');
+        } else {
+          console.error('Error al pausar la reproducción:', response);
+        }
+      })
+      .catch((error) => {
+        console.error('Error al realizar la solicitud de reproducción:', error);
+      });
+  }
+
   private addListeners(): void {
     // Listener: Cuando el reproductor está listo
     this.player.addListener('ready', ({ device_id }: { device_id: string }) => {
@@ -300,6 +343,11 @@ export class SpotifyService {
     // Listener: Cambios en el estado del reproductor
     this.player.addListener('player_state_changed', (state: any) => {
       console.log('Estado del reproductor:', state);
+      if (!state) return;
+
+        const { current_track } = state.track_window;
+        this.currentTrackSubject.next(current_track);
+        this.isPlayingSubject.next(!state.paused);
     });
 
     // Listener: Errores de reproducción
@@ -331,4 +379,9 @@ export class SpotifyService {
       }
     );
   }
+
+    // Método para actualizar el estado de la pista actual
+    setCurrentTrack(track: Track) {
+      this.currentTrackSubject.next(track);
+    }
 }

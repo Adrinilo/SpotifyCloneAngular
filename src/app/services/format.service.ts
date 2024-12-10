@@ -59,7 +59,8 @@ export class FormatService {
     });
   }
 
-  public formatTrackPlaying(item: any): Track {
+  public formatTrackItem(item: any): Track {
+    console.log(item);
     let track: Track = {
       id: item.id,
       name: item.name,
@@ -71,6 +72,13 @@ export class FormatService {
       preview_url: item.preview_url,
       uri: item.uri,
     };
+    return track;
+  }
+
+  // La información proporcionada sobre la canción actual del reproductor es escasa
+  public formatTrackPlaying(item: any): Track {
+    const planetrack = this.spotifyService.getTrackById(item.id);
+    const track = this.formatTrackItem(planetrack);
     return track;
   }
 

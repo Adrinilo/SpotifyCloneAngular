@@ -28,7 +28,6 @@ export class TracksComponent implements OnInit, AfterViewInit {
   constructor(
     private spotifyService: SpotifyService,
     private formatService: FormatService,
-    private dataService: DataService,
     private route: ActivatedRoute,
     private renderer: Renderer2,
     private elRef: ElementRef,
@@ -86,9 +85,11 @@ export class TracksComponent implements OnInit, AfterViewInit {
       .getTrackById(trackId)
       .then((data) => {
         console.log('Canción seleccionada: ' + data.name);
-        this.dataService.setCurrentTrack(
-          this.formatService.formatTrackPlaying(data)
-        );
+        this.spotifyService.getTrackById(data.id).then(track => {
+          const currentTrack = this.formatService.formatTrackItem(track);
+          this.spotifyService.setCurrentTrack(currentTrack);
+          this.spotifyService.playTrack(currentTrack.uri);
+        })
       })
       .catch((error) => {
         console.error('Error fetching track:', error);

@@ -12,13 +12,11 @@ import { Router } from '@angular/router';
 export class PlaybacksdkComponent implements OnInit {
   track: Track = {} as Track;
   deviceId: string = '';
+  isPlaying: boolean = false;
+  player: any;
   //currentTrack = 'spotify:track:4Ny1rlxyM3Lfo37Q0e7Kaj';
 
-  constructor(
-    private spotifyService: SpotifyService,
-    private dataService: DataService,
-    private router: Router
-  ) {}
+  constructor(private spotifyService: SpotifyService, private router: Router) {}
 
   ngOnInit(): void {
     // Obtener la URL actual
@@ -26,25 +24,32 @@ export class PlaybacksdkComponent implements OnInit {
 
     // Verificar si se debe ejecutar la acción, controlando error en login
     if (!currentRoute.includes('login')) {
-      this.spotifyService.initializePlayer(); // Inicializa el reproductor 
+      this.spotifyService.initializePlayer(); // Inicializa el reproductor
     }
 
     // Suscribirse al observable para recibir actualizaciones
-    this.dataService.currentTrack$.subscribe((track) => {
+    this.spotifyService.currentTrack$.subscribe((track) => {
       this.track = track;
-      this.track && this.playTrack();
+      console.log(track);
+      
     });
+
+    // Suscribirse al observable para recibir actualizaciones
+    this.spotifyService.isPlaying$.subscribe((playerState) => {
+      this.isPlaying = playerState;
+    });
+
+    this.isPlaying = this.spotifyService.isPlaying();
   }
 
   playTrack(): void {
-    const trackUri = this.track.uri;
-    this.spotifyService.playTrack(trackUri);
+    this.spotifyService.playTrack(this.track.uri);
   }
 
-  /*pause(): void {
-    this.spotifyService.pause();
+  pauseTrack(): void {
+    this.spotifyService.pauseTrack();
   }
-
+  /*
   resume(): void {
     this.spotifyService.resume();
   }
