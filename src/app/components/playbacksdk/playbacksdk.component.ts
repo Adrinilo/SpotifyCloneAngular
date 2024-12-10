@@ -32,18 +32,17 @@ export class PlaybacksdkComponent implements OnInit {
     }
 
     // Suscribirse al observable para recibir actualizaciones
-    this.spotifyService.currentTrack$.subscribe((track) => {
-      this.track = this.formatService.formatTrackPlaying(track);
-    });
-
-    // Suscribirse al observable para recibir actualizaciones
-    this.spotifyService.isPlaying$.subscribe((isPlaying) => {
-      this.isPlaying = isPlaying;
+    this.spotifyService.playerState$.subscribe((state) => {
+      if (state) {
+        this.track = this.formatService.formatTrackPlaying(state.track_window.current_track);
+        this.track.position_ms = state.position;
+        this.isPlaying = !state.paused;        
+      }
     });
 
     //this.checkPlaybackState();
   }
-  
+
   /*checkPlaybackState() {
     this.spotifyService.getPlaybackState().then((data) => {
       const state: any = data;

@@ -22,14 +22,8 @@ export class SpotifyService {
   private sdkReady: Promise<void>;
   private deviceId: string | null = null;
 
-  /*private playerState = new BehaviorSubject<any>(null);
-  playerState$ = this.playerState.asObservable();*/
-
-  private currentTrackSubject = new BehaviorSubject<any>({} as Track);
-  currentTrack$ = this.currentTrackSubject.asObservable();
-
-  private isPlayingSubject = new BehaviorSubject<boolean>(false);
-  isPlaying$ = this.isPlayingSubject.asObservable();
+  private playerStateSubject = new BehaviorSubject<any>(null);
+  playerState$ = this.playerStateSubject.asObservable();
 
   constructor(private authService: AuthService) {
     this.sdkReady = new Promise((resolve) => {
@@ -343,10 +337,7 @@ export class SpotifyService {
     this.player.addListener('player_state_changed', (state: any) => {
       console.log('Estado del reproductor:', state);
       if (!state) return;
-
-        const { current_track } = state.track_window;
-        this.currentTrackSubject.next(current_track);
-        this.isPlayingSubject.next(!state.paused);
+      this.playerStateSubject.next(state);
     });
 
     // Listener: Errores de reproducción
