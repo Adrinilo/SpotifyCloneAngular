@@ -37,8 +37,8 @@ export class PlaybacksdkComponent implements OnInit {
     });
 
     // Suscribirse al observable para recibir actualizaciones
-    this.spotifyService.isPlaying$.subscribe((playerState) => {
-      this.isPlaying = playerState;
+    this.spotifyService.isPlaying$.subscribe((isPlaying) => {
+      this.isPlaying = isPlaying;
     });
 
     //this.checkPlaybackState();
