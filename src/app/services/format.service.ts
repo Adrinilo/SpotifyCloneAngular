@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Playlist } from '../interfaces/playlist.interface';
-import { Track } from '../interfaces/track.interface';
+import { Track, TrackPlaying } from '../interfaces/track.interface';
 import { Album } from '../interfaces/album.interface';
 import { Artist } from '../interfaces/artist.interface';
 import { User } from '../interfaces/user.interface';
@@ -52,15 +52,14 @@ export class FormatService {
         external_urls: item.track.external_urls.spotify
           ? item.track.external_urls.spotify
           : '',
-        preview_url: item.preview_url,
-        uri: item.uri,
+        preview_url: item.track.preview_url,
+        uri: item.track.uri,
       };
       return tracks;
     });
   }
 
   public formatTrackItem(item: any): Track {
-    console.log(item);
     let track: Track = {
       id: item.id,
       name: item.name,
@@ -75,10 +74,15 @@ export class FormatService {
     return track;
   }
 
-  // La información proporcionada sobre la canción actual del reproductor es escasa
-  public formatTrackPlaying(item: any): Track {
-    const planetrack = this.spotifyService.getTrackById(item.id);
-    const track = this.formatTrackItem(planetrack);
+  public formatTrackPlaying(item: any): TrackPlaying {
+    let track: TrackPlaying = {
+      id: item.id,
+      name: item.name,
+      album_cover: item.album.images ? item.album.images.map((img: any) => img.url) : [],
+      album_name: item.album.name,
+      artists: item.artists as Artist[],
+      uri: item.uri,
+    };
     return track;
   }
 

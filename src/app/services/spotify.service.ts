@@ -265,10 +265,6 @@ export class SpotifyService {
     }
   }
 
-  isPlaying(): boolean {
-    return this.player?.is_playing;
-  }
-
   //Reproduce una canción
   playTrack(trackUri: string): void {
     if (!this.accessToken && !this.deviceId) {
