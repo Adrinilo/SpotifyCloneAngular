@@ -22,6 +22,9 @@ export class SpotifyService {
   private sdkReady: Promise<void>;
   private deviceId: string | null = null;
 
+  /*private playerState = new BehaviorSubject<any>(null);
+  playerState$ = this.playerState.asObservable();*/
+
   private currentTrackSubject = new BehaviorSubject<any>({} as Track);
   currentTrack$ = this.currentTrackSubject.asObservable();
 
@@ -203,7 +206,7 @@ export class SpotifyService {
     }
   }
 
-  public async getPlaybackState() {
+  /*public async getPlaybackState(): Promise<void> {
     try {
       const response = await fetch(this.apiUrl + 'me/player', {
         headers: {
@@ -216,7 +219,7 @@ export class SpotifyService {
       console.error('Error al obtener el estado del reproductor:', error);
       throw error;
     }
-  }
+  }*/
 
   public async initializePlayer(): Promise<void> {
     if (!this.accessToken) {
